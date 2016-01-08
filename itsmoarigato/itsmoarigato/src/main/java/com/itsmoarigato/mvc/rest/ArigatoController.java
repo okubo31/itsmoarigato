@@ -122,7 +122,7 @@ public class ArigatoController {
 	@RequestMapping(value="/rest/arigato/{id}",method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
 	@ResponseBody
-    Json delete(@PathVariable("id")String id) { 
+    Json delete(@PathVariable("id")String id) {
     	this.arigatoManager.delete(me(),toInt(id));
     	return new Json("{\"success\":true}");
     }
