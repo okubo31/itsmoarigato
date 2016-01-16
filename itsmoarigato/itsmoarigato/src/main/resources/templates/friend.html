@@ -31,6 +31,11 @@
 		width: 130px;
 	}
 	
+	#friendname{
+		float: right;
+		width: 550px;
+	}
+	
 	#friendlist{
 		float: right;
 		width: 550px;
@@ -67,7 +72,6 @@
 			
 			$(document).ready(function(){
 				$("#text_2").hide(); //初期では非表示
-				$("#text_3").hide(); //初期では非表示
 			
 				$("ul").on("click","li",function(){
 					$("li.selected").removeClass("selected");
@@ -79,176 +83,142 @@
 					
 				//第2引数で適用する範囲をそれぞれ指定
 				ko.applyBindings(myviewModel,document.getElementById("friendface"));
+				ko.applyBindings(myviewModel,document.getElementById("friendname"));
 				ko.applyBindings(friendviewModel,document.getElementById("friendlist"));
 				ko.applyBindings(viewModel,document.getElementById("tabcontent"));
 				
-				var url = "/rest/user/"+$("#currentUser").val()+"/friend";		//ログイン者の友人一覧
-
+				var url = "/rest/user/"+$("#friendEmail").val()+"/";
 				get(url,'',function(data){
+					myviewModel.myfriend(data);
+				});
+				
+				url = "/rest/user/"+$("#friendEmail").val()+"/friend";
+				get(url,'',function(data){
+					var friends = new Array();
 					$.map(data,function(value,index){
-						if(value.name==$("#friendpage").val()){		//選択された友人なら
-							var currentFriend = value.email;		//currentFriendにその友人のemailを設定
-							url = "/rest/user/"+currentFriend+"/friend";	//選択された友人の友人一覧
-							var my = data.slice(index,index+1);	//data1より配列を抽出
-							myviewModel.myfriends(my)	//新しい配列で定義
-							
-							get(url,'',function(data){
-								var friends = new Array();
-								$.map(data,function(value,index){
-									if(value.name != $("#friendpage").val()){
-										var friend1 = data.slice(index,index+1);	//data2より配列を抽出
-										var friend2 = friends.concat(friend1);	//配列を結合
-										friends = friend2;
-									}
-									friendviewModel.friendfriends(friends)	//新しい配列で定義
-									
-									$(".face").each(function(){
-										$(this).mouseover(function(){
-											$(this).css('background-color','#fad0d0')
-										})
-										$(this).mouseout(function(){
-											$(this).css('background-color','#ffffff')
-										})
-									})
-								})
-							})
-							
-							url = $("#arigatoForm").attr("action");
-							data = $("#writtenByMeForm").serialize();
-							
-							get(url,data,function(data){
-								var messages = new Array();
-								$.map(data,function(value,index){
-									if(value.toUser.email == currentFriend){	//選択された友人へのメッセージのみ取得
-										var message1 = data.slice(index,index+1);
-										var message2 = messages.concat(message1);
-										messages = message2;
-									}
-									viewModel.writtenByMe(messages);	//新しい配列で定義
-								})
-								
-								$(".delete").on({
-									mouseover : function(){
-										$(this).css('cursor','pointer');
-									},
-									click : function(){
-										var url = $("#deleteForm").attr("action");
-										var $deleteButton = $(this)
-										url = url + "/" +$(".id",$deleteButton.parent()).val() +"/";
-										data = $("#deleteForm").serialize();
-										delete_(url,data,function(){
-											$deleteButton.parents("table").remove();
-										})
-									}
-								})
-							
-								$(".edit").on({
-									mouseover : function(){
-										$(this).css('cursor','pointer')
-									},
-									click : function(){
-										var url = $("#updateForm").attr("action");
-										var $editButton = $(this) 
-										url = url + "/" +$(".id",$editButton.parent()).val() +"/";
-										location.href=url
-									}
-								})
-								
-								$(".icon").on({
-									mouseover : function(){
-										$(this).css('cursor','pointer')
-									},
-									click : function(){
-										var url = $("#friendForm").attr("action");
-										var $showButton = $(this) 
-										url = url + "/" + $(".friendId",$showButton.parent()).val() +"/";
-										if($(".friendId",$showButton.parent()).val() == $("#un").text()){
-											location.href="/my"
-										}else{
-											location.href=url
-										}
-									}
-								})
-							})
-						
-							url = $("#arigatoForm").attr("action");
-							data = $("#readByMeForm").serialize();
-						
-							get(url,data,function(data){
-								var messages = new Array();
-								$.map(data,function(value,index){
-									if(value.fromUser.email == currentFriend){
-										var message1 = data.slice(index,index+1);
-										var message2 = messages.concat(message1);
-										messages = message2;
-									}
-									viewModel.readByMe(messages);
-								})
-								
-								$(".icon").on({
-									mouseover : function(){
-										$(this).css('cursor','pointer')
-									},
-									click : function(){
-										var url = $("#friendForm").attr("action");
-										var $showButton = $(this) 
-										url = url + "/" + $(".friendId",$showButton.parent()).val() +"/";
-										if($(".friendId",$showButton.parent()).val() == $("#un").text()){
-											location.href="/my"
-										}else{
-											location.href=url
-										}
-									}
-								})									
-							})
-							var email = currentFriend
-							$("#toUserId").val(email) //メッセージ作成先に選択中の友達を設定
+						if(value.email != $("#friendEmail").val()){
+							var friend1 = data.slice(index,index+1);
+							var friend2 = friends.concat(friend1);
+							friends = friend2;
+						}
+						friendviewModel.friendfriends(friends)
+					})
+
+					$(".face").each(function(){
+						$(this).mouseover(function(){
+							$(this).css('background-color','#fad0d0')
+						})
+						$(this).mouseout(function(){
+							$(this).css('background-color','#ffffff')
+						})
+					})
+
+					$(".face").on({
+						mouseover : function(){
+							$(this).css('cursor','pointer')
+						},
+						click : function(){
+							var url = $("#friendForm").attr("action");
+							var $showButton = $(this) 
+							url = url + "/" + $(".friendId",$showButton.parent()).val() +"/";
+							if($(".friendId",$showButton.parent()).val() == $("#currentUserEmail").val()){
+								location.href="/my"
+							}else{
+								location.href=url
+							}
 						}
 					})
 				});
 				
-				$("#submit").click(function(){
-					$("#submit").prop("disabled",true);
 				
-                    var url = $("#sendMessage").attr("action");
-                    var method = $("#sendMessage").attr("method");
-                    var data = $("#sendMessage").serialize();
-					$.ajax({
-						url: url,
-						type:method,
-						data:data
-					})
-					.done(function(data, status, xhr){
-						if( $('input[type=file]').val() != ''){
-						
-							var url = $("#sendMessage").attr("action");
-							url = url+'/'+data.arigatoId+'/image'
-							var csrf = $('#sendMessage input[name="_csrf"]').serialize()
-						
-							$('input[type=file]').upload(url,csrf, function(res) {
-								handleDone(res);
-							}, 'json');
-						}else{
-							handleDone(data)
+				url = $("#arigatoForm").attr("action");
+				data = $("#writtenByMeForm").serialize();
+				get(url,data,function(data){
+					var messages = new Array();
+					$.map(data,function(value,index){
+						if(value.toUser.email == $("#friendEmail").val()){
+							var message1 = data.slice(index,index+1);
+							var message2 = messages.concat(message1);
+							messages = message2;
 						}
-						
+						viewModel.writtenByMe(messages);
 					})
-					.fail(function( data, status, xhr){
-						var error = eval("(" 	+ data.responseText + ")");
-						if(error.message.indexOf("Validation failed") == 0){
-							$('#result').text("");
-							$('#errors').text("入力エラーがあります。ご確認ください");
-							$.each(error.errors,function(){
-								$('#'+this.field+'_error').text(this.defaultMessage);
-							});
-						}else{
-							alert("fail" + data.responseText);
+					
+					$(".delete").on({
+						mouseover : function(){
+							$(this).css('cursor','pointer');
+						},
+						click : function(){
+							var url = $("#deleteForm").attr("action");
+							var $deleteButton = $(this)
+							url = url + "/" +$(".id",$deleteButton.parent()).val() +"/";
+							data = $("#deleteForm").serialize();
+							delete_(url,data,function(){
+								$deleteButton.parents("table").remove();
+							})
 						}
-						$("#submit").prop("disabled",false);
+					})
+								
+					$(".edit").on({
+						mouseover : function(){
+							$(this).css('cursor','pointer')
+						},
+						click : function(){
+							var url = $("#updateForm").attr("action");
+							var $editButton = $(this) 
+							url = url + "/" +$(".id",$editButton.parent()).val() +"/";
+							location.href=url
+						}
+					})
+					
+					$(".icon").on({
+						mouseover : function(){
+							$(this).css('cursor','pointer')
+						},
+						click : function(){
+							var url = $("#friendForm").attr("action");
+							var $showButton = $(this) 
+							url = url + "/" + $(".friendId",$showButton.parent()).val() +"/";
+							if($(".friendId",$showButton.parent()).val() == $("#currentUserEmail").val()){
+								location.href="/my"
+							}else{
+								location.href=url
+							}
+						}
 					})
 				});
 				
-			}) //ready
+				url = $("#arigatoForm").attr("action");
+				data = $("#readByMeForm").serialize();
+				get(url,data,function(data){
+					var messages = new Array();
+					$.map(data,function(value,index){
+						if(value.fromUser.email == $("#friendEmail").val()){
+							var message1 = data.slice(index,index+1);
+							var message2 = messages.concat(message1);
+							messages = message2;
+						}
+						viewModel.readByMe(messages);
+					})
+					
+					$(".icon").on({
+						mouseover : function(){
+							$(this).css('cursor','pointer')
+						},
+						click : function(){
+							var url = $("#friendForm").attr("action");
+							var $showButton = $(this) 
+							url = url + "/" + $(".friendId",$showButton.parent()).val() +"/";
+							if($(".friendId",$showButton.parent()).val() == $("#currentUserEmail").val()){
+								location.href="/my"
+							}else{
+								location.href=url
+							}
+						}
+					})
+				});
+				
+			})
 			
 			function get(url,data,doneHandler){
 				$.ajax({
@@ -265,7 +235,7 @@
 				.fail(function( data, status, xhr){
 					alert("fail" + data.responseText);
 				})
-			} //function get
+			}
 			
 			function delete_(url,data,doneHandler){
 				$.ajax({
@@ -283,7 +253,7 @@
 				.fail(function( data, status, xhr){
 					alert("fail" + data.responseText);
 				})
-			} //function delete_
+			}
 			
 			handleDone = function(res){
 				alert("ご登録ありがとうございました!");
@@ -300,7 +270,7 @@
 			}
 			function myViewModel() {
 				var self = this;
-				self.myfriends = ko.observableArray([]);
+				self.myfriend = ko.observableArray([]);
 			}
 			function friendViewModel() {
 				var self = this;
@@ -309,11 +279,11 @@
 		</script>
 
 
-<!-- 選択された友人のnameを受け取り -->
-		<input type="hidden" id="friendpage" th:value="${friendName}" />
+<!-- 選択された友人のemailを受け取り -->
+	<input type="hidden" id="friendEmail" th:value="${friendEmail}" />
 
 <!-- 選択された友人のアイコンを表示 -->
-		<div id="friendface" data-bind="foreach: myfriends">
+		<div id="friendface" data-bind="foreach: myfriend">
 			<table>
 				<td>
 					<img data-bind="attr:{src: image.url}" style="max-height:5em" class="pull-left"></img><br />
@@ -322,14 +292,18 @@
 			</table>
 		</div>
 
-<!-- 選択された友人の友人一覧を表示 -->
+<!-- 選択された友人の名前を表示 -->
+		<div id="friendname" data-bind="foreach: myfriend">
+			<span data-bind="text: name" />さんの友達
+		</div>
+		
+<!-- 選択された友人の友人一覧を表示 -->		
 		<div id="friendlist">
 			<table>
-			<p th:text="${friendName}+さんの友達" />
 				<tr data-bind="foreach: friendfriends">
 					<td class="face">
-						<img data-bind="attr:{src: image.url}" style="max-height:3em" class="icon">
-							<input type="hidden" class="friendId" data-bind="attr:{value: name}"/>
+						<img data-bind="attr:{src: image.url}" style="max-height:3em">
+							<input type="hidden" class="friendId" data-bind="attr:{value: email}"/>
 						</img><br />
 						<span data-bind="text: name" />
 					</td>
@@ -342,7 +316,6 @@
 			<ul>
 				<li id="tab_1" class="selected"><a href="#readByMe">あなたへのメッセージ</a></li>
 				<li id="tab_2"><a href="#writtenByMe">あなたからのメッセージ</a></li>
-				<li id="tab_3"><a href="#sendMessage">メッセージ作成</a></li>
 			</ul>
 		</div>
 
@@ -357,11 +330,11 @@
 								<table>
 									<tr>
 										<td><img data-bind="attr:{src: fromUser.image.url}" style="max-height:2em" class="icon">
-											<input type="hidden" class="friendId" data-bind="attr:{value:fromUser.name}" />
+											<input type="hidden" class="friendId" data-bind="attr:{value:fromUser.email}" />
 										</img><br /><span data-bind="text: fromUser.name"></span></td>
 										<td><img th:src="@{/resources/img/to.png}" style="max-height:3em" ></img></td>
 										<td><img data-bind="attr:{src: toUser.image.url}" style="max-height:2em" class="icon">
-											<input type="hidden" class="friendId" data-bind="attr:{value:toUser.name}" />						
+											<input type="hidden" class="friendId" data-bind="attr:{value:toUser.email}" />						
 										</img><br /><span data-bind="text: toUser.name"></span></td>
 									</tr>
 								</table>
@@ -395,11 +368,11 @@
 								<table>
 									<tr>
 										<td><img data-bind="attr:{src: fromUser.image.url}" style="max-height:2em" class="icon">
-											<input type="hidden" class="friendId" data-bind="attr:{value:fromUser.name}" />						
+											<input type="hidden" class="friendId" data-bind="attr:{value:fromUser.email}" />						
 										</img><br /><span data-bind="text: fromUser.name"></span></td>
 										<td><img th:src="@{/resources/img/to.png}" style="max-height:3em" ></img></td>
 										<td><img data-bind="attr:{src: toUser.image.url}" style="max-height:2em" class="icon">
-											<input type="hidden" class="friendId" data-bind="attr:{value:toUser.name}" />
+											<input type="hidden" class="friendId" data-bind="attr:{value:toUser.email}" />
 										</img><br /><span data-bind="text: toUser.name"></span></td>
 									</tr>
 								</table>
@@ -418,22 +391,6 @@
 						</tr>
 					</table>
 				</div> 
-			</div> 
-			
-			<div id="text_3">
-				<div id="result"></div>
-				<div id="errors" class="error"></div>
-				<form id="sendMessage" method="post" th:action="@{/rest/arigato}">
-				<table>
-					<tr><td>ありがとう<img th:src="@{/resources/img/to.png}" style="max-height:3em" ></img></td><td>
-					<input type="hidden" id="toUserId" name="toUserId" />
-					<span id="toUserId_error" class="error" /></td></tr>
-					<tr><td>件名</td><td><input type="text" id="subject" name="subject" /><span id="subject_error" class="error" /></td></tr>
-					<tr><td>感謝のことば</td><td><input type="text" id="message" name="message" /><span id="message_error" class="error" /></td></tr>
-					<tr><td>写真・画像</td><td><input type="file" id="img" name="file" /><span id="file_error" class="error" /></td></tr>
-					<tr><td></td><td><input type="button" id="submit" value="click" /></td></tr> 
-				</table>
-				</form>
 			</div> 
 			
 		</div>

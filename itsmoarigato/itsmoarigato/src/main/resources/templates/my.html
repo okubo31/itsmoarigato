@@ -131,7 +131,7 @@
 							var url = $("#friendForm").attr("action");
 							var $showButton = $(this) 
 							url = url + "/" + $(".friendId",$showButton.parent()).val() +"/";
-							if($(".friendId",$showButton.parent()).val() == $("#un").text()){
+							if($(".friendId",$showButton.parent()).val() == $("#currentUserEmail").val()){
 								location.href="/my"
 							}else{
 								location.href=url
@@ -154,7 +154,7 @@
 							var url = $("#friendForm").attr("action");
 							var $showButton = $(this) 
 							url = url + "/" + $(".friendId",$showButton.parent()).val() +"/";
-							if($(".friendId",$showButton.parent()).val() == $("#un").text()){
+							if($(".friendId",$showButton.parent()).val() == $("#currentUserEmail").val()){
 								location.href="/my"
 							}else{
 								location.href=url
@@ -228,7 +228,7 @@
 				<tr data-bind="foreach: friends">
 					<td class="face">
 						<img data-bind="attr:{src: image.url}" style="max-height:3em" class="icon">
-							<input type="hidden" class="friendId" data-bind="attr:{value: name}"/>
+							<input type="hidden" class="friendId" data-bind="attr:{value: email}"/>
 						</img><br />
 						<span data-bind="text: name" />
 					</td>
@@ -259,11 +259,11 @@
 								<table>
 									<tr>
 										<td><img data-bind="attr:{src: fromUser.image.url}" style="max-height:2em" class="icon">
-											<input type="hidden" class="friendId" data-bind="attr:{value:fromUser.name}" />
+											<input type="hidden" class="friendId" data-bind="attr:{value:fromUser.email}" />
 										</img><br /><span data-bind="text: fromUser.name"></span></td>
 										<td><img th:src="@{/resources/img/to.png}" style="max-height:3em" ></img></td>
 										<td><img data-bind="attr:{src: toUser.image.url}" style="max-height:2em" class="icon">
-											<input type="hidden" class="friendId" data-bind="attr:{value:toUser.name}" />
+											<input type="hidden" class="friendId" data-bind="attr:{value:toUser.email}" />
 										</img><br /><span data-bind="text: toUser.name"></span></td>
 									</tr>
 								</table>
@@ -292,11 +292,11 @@
 								<table>
 									<tr>
 										<td><img data-bind="attr:{src: fromUser.image.url}" style="max-height:2em" class="icon">
-											<input type="hidden" class="friendId" data-bind="attr:{value:fromUser.name}" />
+											<input type="hidden" class="friendId" data-bind="attr:{value:fromUser.email}" />
 										</img><br /><span data-bind="text: fromUser.name"></span></td>
 										<td><img th:src="@{/resources/img/to.png}" style="max-height:3em" ></img></td>
 										<td><img data-bind="attr:{src: toUser.image.url}" style="max-height:2em" class="icon">
-											<input type="hidden" class="friendId" data-bind="attr:{value:toUser.name}" />
+											<input type="hidden" class="friendId" data-bind="attr:{value:toUser.email}" />
 										</img><br /><span data-bind="text: toUser.name"></span></td>
 									</tr>
 								</table>

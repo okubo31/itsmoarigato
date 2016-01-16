@@ -34,9 +34,9 @@ public class IndexController {
 		return "update";
 	}
 	
-	@RequestMapping("/friend/{id}")
-	public String friend(@PathVariable("id")String id,Model model){
-		model.addAttribute("friendName",id);
+	@RequestMapping("/friend/{email}")
+	public String friend(@PathVariable("email")String email,Model model){
+		model.addAttribute("friendEmail",email);
 		return "friend";
 	}
 }

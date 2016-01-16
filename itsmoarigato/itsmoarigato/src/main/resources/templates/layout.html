@@ -96,6 +96,7 @@
 					<input type="submit" value="Log out" />
 			</form>
 			<input type="hidden" id="currentUser" th:value="${currentUser.username}"/>
+			<input type="hidden" id="currentUserEmail" th:value="${currentUser.user.email}" />
 			<a id="me" th:href="@{/my}">
 			<img th:src="${currentUser.user.image.url}" style="max-height:3em" class="pull-right" th:alt="${currentUser.user.name}"></img>
 			<p id="un" class="navbar-text pull-right" th:text="${currentUser.user.name}">
