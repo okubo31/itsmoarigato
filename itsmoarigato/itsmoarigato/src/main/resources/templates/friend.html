@@ -103,19 +103,11 @@
 						}
 						friendviewModel.friendfriends(friends)
 					})
-
-					$(".face").each(function(){
-						$(this).mouseover(function(){
-							$(this).css('background-color','#fad0d0')
-						})
-						$(this).mouseout(function(){
-							$(this).css('background-color','#ffffff')
-						})
-					})
-
-					$(".face").on({
+					
+					$(".icon").on({
 						mouseover : function(){
 							$(this).css('cursor','pointer')
+							$(this).css('background-color','#fad0d0')
 						},
 						click : function(){
 							var url = $("#friendForm").attr("action");
@@ -301,8 +293,8 @@
 		<div id="friendlist">
 			<table>
 				<tr data-bind="foreach: friendfriends">
-					<td class="face">
-						<img data-bind="attr:{src: image.url}" style="max-height:3em">
+					<td>
+						<img data-bind="attr:{src: image.url}" style="max-height:3em" class="icon">
 							<input type="hidden" class="friendId" data-bind="attr:{value: email}"/>
 						</img><br />
 						<span data-bind="text: name" />
