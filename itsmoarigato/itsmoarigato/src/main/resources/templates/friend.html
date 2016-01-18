@@ -67,10 +67,12 @@
 	<div layout:fragment="content">	
 		<script>
 			var viewModel = new AppViewModel()
-			var myviewModel = new myViewModel()		//ログイン者の友人取得
-			var friendviewModel = new friendViewModel()		//選択された友人の友人取得
+			var myviewModel = new myViewModel()
+			var friendviewModel = new friendViewModel()
 			
 			$(document).ready(function(){
+				value = $("#friendEmail").val();
+			
 				$("#text_2").hide(); //初期では非表示
 			
 				$("ul").on("click","li",function(){

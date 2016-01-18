@@ -5,8 +5,14 @@
 <body>
 	<div layout:fragment="content">
 		<script>
+			var toUserEmail = location.search.substring(1);
+			
 			var viewModel = new AppViewModel()
 			$(document).ready(function(){
+				if(toUserEmail != "undefined"){
+					$("#toUserId").val(toUserEmail)
+				}
+				
 				ko.applyBindings(viewModel);
 
 				var url = "/rest/user/"+$("#currentUser").val()+"/friend";
