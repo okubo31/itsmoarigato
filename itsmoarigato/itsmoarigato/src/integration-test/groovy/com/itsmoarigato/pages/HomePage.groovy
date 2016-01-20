@@ -25,6 +25,7 @@ class HomePage extends Menu {
 			$('.subject',0).text() != 'delete test'
 		}
 		"部長のアイコンをクリックする"{
+			waitFor{$('.arigato').size() != 0}
 			$('.arigato',0).find('.icon',1).click()
 		}
 	}

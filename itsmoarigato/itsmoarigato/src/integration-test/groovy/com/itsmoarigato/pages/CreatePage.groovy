@@ -13,6 +13,7 @@ class CreatePage extends Menu{
 			withAlert(wait:true){$('#submit').click()} == 'ご登録ありがとうございました!'
 		}
 		"toUserIdのテキストボックスの値が部長のidであるべき"{
+			waitFor{$('.face',0)!=null}
 			assert $('#toUserId').value() == 'bucho@hoge.co.jp'
 			true
 		}
