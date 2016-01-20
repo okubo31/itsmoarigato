@@ -130,6 +130,17 @@ class WhenRegistArigatoSpec extends GebReportingSpec {
 		when: "項目を入力して更新する"()
 		then: "更新画面が表示されるべき"
 			at UpdatePage
+			
+		when: "メイン画面を表示する"
+			via HomePage
+			"部長のアイコンをクリックする"()
+		then: "部長のページに遷移するべき"
+			at FriendPage
+		when: "新規登録リンクをクリックする"()
+		then: "新規登録画面が表示されるべき"
+			at CreatePage
+		then: "toUserIdのテキストボックスの値が部長のidであるべき"()
+		
 	}
 
 	def "削除のテスト"(){

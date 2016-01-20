@@ -12,5 +12,9 @@ class CreatePage extends Menu{
 			$('#message') << '今日も頑張ってるね:)'
 			withAlert(wait:true){$('#submit').click()} == 'ご登録ありがとうございました!'
 		}
+		"toUserIdのテキストボックスの値が部長のidであるべき"{
+			assert $('#toUserId').value() == 'bucho@hoge.co.jp'
+			true
+		}
 	}
 }
