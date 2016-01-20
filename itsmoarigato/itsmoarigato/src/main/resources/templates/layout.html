@@ -83,18 +83,6 @@
 
 
 	<body>
-		<script>
-			var value;
-			var link;
-			
-			$(document).ready(function(){
-				link = document.getElementById("toCreate");
-			});
-			
-			function getToUserEmail(){
-				link.href = link.href.split("?")[0]+"?"+value;
-			}
-		</script>
 	
 		<div id="wrap">
 			<div class="navbar navbar-inverse navbar-static-top">
@@ -133,7 +121,7 @@
 							th:text="${globalMessage}">
 						Some Success message
 				</div>
-				<a id="toCreate" th:href="@{/create}" onclick=" getToUserEmail(); "><img th:src="@{/resources/img/create.png}" alt="ありがとうを伝える"></img></a><br /><br />
+				<a id="toCreate" th:href="@{/create}"><img th:src="@{/resources/img/create.png}" alt="ありがとうを伝える"></img></a><br /><br />
 				<hr />
 				<div layout:fragment="content">
 						Fake content

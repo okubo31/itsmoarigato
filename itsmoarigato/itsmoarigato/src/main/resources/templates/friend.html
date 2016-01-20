@@ -71,8 +71,10 @@
 			var friendviewModel = new friendViewModel()
 			
 			$(document).ready(function(){
-				value = $("#friendEmail").val();
-			
+				$("#toCreate").attr("href",
+				$("#toCreate").attr("href")+"?"+
+				$("#friendEmail").val())
+		
 				$("#text_2").hide(); //初期では非表示
 			
 				$("ul").on("click","li",function(){
