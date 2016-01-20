@@ -23,6 +23,7 @@ public class IndexController {
 		return "my";
 	}
 
+	//FIXME UserIdをRequestparamから取得する
 	@RequestMapping("/create")
 	public String create() {
 		return "create";

@@ -71,9 +71,8 @@
 			var friendviewModel = new friendViewModel()
 			
 			$(document).ready(function(){
-				$("#toCreate").attr("href",
-				$("#toCreate").attr("href")+"?"+
-				$("#friendEmail").val())
+				//FIXME なんか変えなきゃいけないらしい、、
+				$("#toCreate").attr("href",$("#toCreate").attr("href")+"?"+$("#friendEmail").val())
 		
 				$("#text_2").hide(); //初期では非表示
 			
